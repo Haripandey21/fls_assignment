@@ -4,7 +4,7 @@ contract ProofOfExistence1 {
       // state
       bytes32 public proof;
 
-      // calculate and store the proof for a document
+      // calculate and store the proof for a document.
       // *transactional function*
       function notarize(string memory document) public {
         
