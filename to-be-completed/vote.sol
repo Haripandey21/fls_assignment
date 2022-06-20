@@ -1,4 +1,5 @@
-pragma solidity ^0.6.4;
+// SPDX-License-Identifier: GPL-3.0
+pragma solidity ^0.8.0;
 
 contract cityPoll {
     
@@ -9,32 +10,40 @@ contract cityPoll {
     }
 
 
-    mapping() public cities; //mapping city Id with the City ctruct - cityId should be uint256
-    mapping() hasVoted; //mapping to check if the address/account has voted or not
+    mapping(uint256 => City) public cities; //mapping city Id with the City ctruct - cityId should be uint256
+    mapping(address => bool) hasVoted; //mapping to check if the address/account has voted or not
 
     address owner;
     uint256 public cityCount = 0; // number of city added
-    constructor() public {
+    
+    constructor()  {
     
     //TODO set contract caller as owner
     //TODO set some intitial cities.
-    }
- 
- 
-    function addCity() public {
-      //  TODO: add city to the CityStruct
-
-    }
+     owner = msg.sender;
+        cities[cityCount] = City("kirtipur",0);
     
-    function vote() public {
-        
-        //TODO Vote the selected city through cityID
+        cityCount++;
+    
+    }
+ 
+ function addCity(string memory _cityName) public{
+        cities[cityCount] = City(_cityName,0);
+        cityCount ++;
+    }
+   function vote(uint256 cityID) public {
+        City storage myVote = cities[cityID];
+        myVote.vote ++;
+    }
 
+    function getCity(uint256 cityID) public view returns(string memory){
+        City storage myCity = cities[cityID];
+        return myCity.cityName;
     }
-    function getCity() public view returns (string memory) {
-     // TODO get the city details through cityID
-    }
-    function getVote() public view returns (uint256) {
-    // TODO get the vote of the city with its ID
-    }
+
+     function getVote(uint256 cityID) public view returns (uint256) {
+         City storage myCity = cities[cityID];
+         return myCity.vote;
+     }
 }
+    
