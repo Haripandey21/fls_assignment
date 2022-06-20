@@ -1,20 +1,22 @@
-pragma solidity ^0.5.0;
+pragma solidity ^0.8.5;
 
 contract ProofOfExistence3 {
 
   mapping (bytes32 => bool) private proofs;
   
   // store a proof of existence in the contract state
-  function storeProof(bytes32 proof) 
-    internal 
+  function storeProof(bytes32 proof) internal 
   {
-
+proofs[proof] = true;
   }
   
   // calculate and store the proof for a document
   function notarize(string memory document) 
     public 
   { 
+        bytes32 proof;
+        proof = proofFor(document);
+        storeProof(proof);
 
   }
   
@@ -24,7 +26,7 @@ contract ProofOfExistence3 {
     private 
     returns (bytes32) 
   {
- 
+  return sha256(abi.encodePacked(document));
   }
   
   // check if a document has been notarized
@@ -33,6 +35,8 @@ contract ProofOfExistence3 {
     view 
     returns (bool) 
   {
+  bytes32 proof = proofFor(document);
+        return hasProof(proof);
 
   }
 
@@ -42,6 +46,6 @@ contract ProofOfExistence3 {
     view 
     returns(bool) 
   {
-
+ return proofs[proof];
   }
 }
